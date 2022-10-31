@@ -65,7 +65,7 @@ class FollowViewSet(CreateModelMixin, ListModelMixin, viewsets.GenericViewSet):
         serializer.save(
             user=self.request.user,
             following=get_object_or_404(
-                User, username=self.request.POST['following']
+                User, username=self.request.data['following']
             )
         )
 
