@@ -21,10 +21,10 @@ User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
     """Вьюсет для модели Post."""
-    queryset = Post.objects.all()
+    queryset = Post.objects.select_related('author').all()
     serializer_class = PostSerializer
     permission_classes = (
-        AuthorOrReadOnly, permissions.IsAuthenticatedOrReadOnly
+        permissions.IsAuthenticatedOrReadOnly, AuthorOrReadOnly
     )
     pagination_class = LimitOffsetPagination
 
@@ -42,7 +42,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     """Вьюсет для модели Comment."""
     serializer_class = CommentSerializer
     permission_classes = (
-        AuthorOrReadOnly, permissions.IsAuthenticatedOrReadOnly
+        permissions.IsAuthenticatedOrReadOnly, AuthorOrReadOnly
     )
 
     def perform_create(self, serializer):
@@ -53,7 +53,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         post_id = self.kwargs.get('post_id')
-        new_queryset = Comment.objects.filter(post=post_id)
+        new_queryset = Comment.objects.filter(post=post_id).select_related('author')
         return new_queryset
 
 
