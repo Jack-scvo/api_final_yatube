@@ -53,7 +53,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         post_id = self.kwargs.get('post_id')
-        new_queryset = Comment.objects.filter(post=post_id).select_related('author')
+        new_queryset = Comment.objects.filter(post=post_id).select_related(
+            'author'
+        )
         return new_queryset
 
 
